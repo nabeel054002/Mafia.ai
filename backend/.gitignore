@@ -1,0 +1,24 @@
+# Ignore Go binary
+/bin/
+/obj/
+
+# Ignore dependency directories
+/vendor/
+
+# Go workspace file
+/go.work
+/go.work.sum
+
+# Ignore compiled Go files
+*.exe
+*.exe~
+*.out
+*.test
+
+# Ignore IDE/Editor files
+.idea/
+.vscode/
+*.swp
+
+# Ignore logs
+*.log
