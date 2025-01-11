@@ -1,0 +1,1 @@
+this is the backend repo for the mafia.ai project this iwll have the smart contracts, game admin, and the ai agent code 

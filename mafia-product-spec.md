@@ -1,97 +1,117 @@
-# AI Mafia - Product Specification
+# AI Mafia: Anonymous Edition
+A social deduction game where players face intelligent AI opponents with anonymous voting mechanics.
 
-## Product Overview
-AI Mafia is a text-based social deduction game where players face off against intelligent AI agents. Unlike traditional Mafia games where players pretend to be mafia, here the AI agents are the actual opponents, trying to blend in while eliminating human players.
+## Game Overview
+Players engage in a battle of wits against AI agents, using social deduction and anonymous voting to eliminate opponents. All votes are private, with only aggregated results shown to maintain strategic depth.
 
 ## Core Game Experience
 
-### Game Setup
-- 6-12 players total
-- 2-3 AI agents (number hidden from players)
-- Game host announces when room is full
-- All players receive role confirmation (Human or AI Agent)
-- AI agents privately know each other's identities
+### Setup Phase
+- 6-12 players per game
+- 2-3 AI agents (exact number hidden)
+- Players receive private role assignments
+- Game begins when room fills
+- Each player gets a unique identifier
 
-### Game Flow
+### Game Loop
 
-#### 1. Night Phase (60 seconds)
-- All players receive "Night has fallen" message
-- Humans can only observe (no actions available)
-- AI agents privately coordinate their target selection
-- System announces elimination result: "X was eliminated in the night"
+#### 1. Night Phase (45 seconds)
+- AI agents select a human target
+- Humans cannot take actions
+- Result announcement: "Player X was eliminated"
+- No information about AI decision process revealed
 
-#### 2. Day Phase (5 minutes)
-- Opens with "Day begins" announcement
-- Shows current survivor count
-- All players can:
-  - Chat in public channel
+#### 2. Discussion Phase (4 minutes)
+- Open discussion among all players
+- Players can:
   - Share theories
+  - Make accusations
   - Defend themselves
-  - Ask questions
-  - Call for votes
+  - Strategize openly
+- AI agents participate in discussion
 
-#### 3. Voting Phase (60 seconds)
-- System announces "Time to vote!"
-- All players must vote or abstain
-- Live vote count displayed
-- Final tally revealed
-- Eliminated player's true identity revealed (Human/AI)
+#### 3. Anonymous Voting Phase (60 seconds)
+- Each player votes privately
+- Only confirmation of "Vote Cast" shown
+- Players cannot see others' votes
+- Live aggregate display:
+  ```
+  Vote Status:
+  - 7/8 players have voted
+  - Time remaining: 30s
+  ```
+
+#### 4. Results Phase (15 seconds)
+- Shows only total votes per player:
+  ```
+  Final Vote Tally:
+  Player A: 3 votes
+  Player B: 2 votes
+  Player C: 2 votes
+  Player D: 1 vote
+  ```
+- Highest vote-getter is eliminated
+- Ties result in random elimination
+- Eliminated player's role is revealed
 
 ### Victory Conditions
-- Humans win by eliminating all AI agents
-- AI wins by surviving until they equal human numbers
-- Game ends immediately when either condition is met
+- Humans Win: All AI agents eliminated
+- AI Wins: Number of AI agents equals surviving humans
 
-## Player Experience
+## Player Tools & Commands
 
-### Human Player Experience
-- Must deduce AI agents through:
-  - Chat behavior analysis
-  - Voting patterns
-  - Response timing
-  - Discussion consistency
-- Can take notes
-- Must collaborate with other humans
-- Risk of elimination each night
-
-### Commands & Actions
-Players can:
-- /vote [player_name] - Cast vote
-- /unvote - Remove vote
+### Core Commands
+- /vote [player_id] - Cast anonymous vote
+- /unvote - Cancel your vote
 - /list - See alive players
-- /votes - Check current vote count
-- /timer - Check phase time remaining
+- /tally - View current vote totals
+- /time - Check phase timer
 
-### Game Information Display
+### Information Display
 Players always see:
 - Current phase
 - Time remaining
 - Alive player count
-- Vote counts during voting
-- Game history (eliminations)
+- Anonymous vote counts
+- Game history log
 
-## Unique Selling Points
-1. Real AI Opponents
-   - Not scripted NPCs
-   - Dynamic conversations
-   - Strategic decision making
-   - Ability to deceive
+## Unique Features
 
-2. Pure Social Deduction
-   - No special roles/powers
-   - Focus on observation
-   - Emphasis on discussion
-   - Strategy over mechanics
+### Anonymous Voting System
+- Votes are completely private
+- Only aggregate results shown
+- No voting history tracked
+- Unable to prove who voted for whom
 
-3. Quick Games
-   - 15-20 minute sessions
-   - Clear progression
-   - Immediate feedback
-   - Replayability through AI variation
+### Real-time Vote Display
+```
+Current Vote Distribution:
+Total Votes Cast: 6/8
+[##########] Player A (3)
+[######    ] Player B (2)
+[####      ] Player C (1)
+[          ] Player D (0)
+```
+
+### Game History Log
+```
+Day 3 Summary:
+- 8 players voted
+- Player C eliminated (was Human)
+- 5 humans and 2 AI remain
+```
+
+## Social Features
+- Text chat during discussion phase
+- Quick response shortcuts
+- Basic player profile stats:
+  - Games played
+  - Win rate
+  - Average survival time
 
 ## Future Considerations
-- Skill-based matchmaking
-- Different AI personality types
-- Custom game settings
-- Tournament mode
-- Replay system
+- Reputation system
+- AI personality variants
+- Custom game modes
+- Spectator mode
+- Tournament support
