@@ -3,54 +3,60 @@ import './App.css';
 import GameBoard from './game-board';
 import { GameState } from './types';
 
-
-
-// App Component
 const App: React.FC = () => {
-  const [gameId, setGameId] = useState<string | null>(null);
   const [gameState, setGameState] = useState<GameState | null>(null);
   const [playerId, setPlayerId] = useState<string | null>(null);
 
-  const createGame = async () => {
-    const response = await fetch('/create');
-    const data = await response.json();
-    setGameId(data.gameID);
-  };
-
-  const joinGame = async () => {
-    if (!gameId) return;
-    const response = await fetch(`/join?gameID=${gameId}`);
+  // Connect or start a single game instance
+  const connectToGame = async () => {
+    const response = await fetch('http://localhost:3000/join');
     const data = await response.json();
     setPlayerId(data.playerID);
+    setGameState(data.gameState);
   };
 
   const fetchGameState = async () => {
-    if (!gameId) return;
-    const response = await fetch(`/status?gameID=${gameId}`);
+    const response = await fetch('http://localhost:3000/status');
     const data = await response.json();
     setGameState(data);
   };
 
   const castVote = async (voteTarget: string) => {
-    if (!gameId || !playerId) return;
-    await fetch(`/vote?gameID=${gameId}&playerID=${playerId}&voteTarget=${voteTarget}`);
+    if (!playerId) return;
+    await fetch(`http://localhost:3000/vote?playerID=${playerId}&voteTarget=${voteTarget}`);
     fetchGameState();
   };
 
+  const healthCheck = async () => {
+    const response = await fetch('http://localhost:3000/health');
+    console.log("Healthcheck resonse", response);
+    return response
+  }
+
+  // Establish WebSocket connection
   useEffect(() => {
-    if (gameId) fetchGameState();
-  }, [gameId]);
+    if (!playerId) return;
+    const socket = new WebSocket('ws://localhost:3000/socket');
+    socket.onmessage = (event) => {
+      const updatedGameState = JSON.parse(event.data);
+      setGameState(updatedGameState);
+    };
+    return () => socket.close();
+  }, [playerId]);
+
+  useEffect(() => {
+    fetchGameState();
+  }, []);
+
+  useEffect(() => {
+    healthCheck()
+  }, [])
 
   return (
     <div className="App">
       <h1>AI Mafia: Anonymous Edition</h1>
-      {!gameId && (
-        <button onClick={createGame}>Create Game</button>
-      )}
-      {gameId && !playerId && (
-        <div>
-          <button onClick={joinGame}>Join Game</button>
-        </div>
+      {!playerId && (
+        <button onClick={connectToGame}>Start/Join Game</button>
       )}
       {playerId && gameState && (
         <GameBoard
@@ -62,6 +68,5 @@ const App: React.FC = () => {
     </div>
   );
 };
-
 
 export default App;

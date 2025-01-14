@@ -1,1 +1,30 @@
 this is the backend repo for the mafia.ai project this iwll have the smart contracts, game admin, and the ai agent code 
+
+
+func SocketHandler(w http.ResponseWriter, r *http.Request) {
+	// Upgrade HTTP connection to WebSocket
+	conn, err := upgrader.Upgrade(w, r, nil)
+	if err != nil {
+		http.Error(w, "Could not open websocket connection", http.StatusBadRequest)
+		return
+	}
+	defer conn.Close()
+
+	// Example: Broadcast game state updates to connected clients
+	for {
+		// Read message from WebSocket
+		_, msg, err := conn.ReadMessage()
+		if err != nil {
+			fmt.Println("Error reading message:", err)
+			break
+		}
+		// Handle game logic and broadcast new state if needed
+		gameID := string(msg) // You can replace this logic as needed
+		gameState := game.GetGameState(gameID)
+		err = conn.WriteJSON(gameState)
+		if err != nil {
+			fmt.Println("Error writing message:", err)
+			break
+		}
+	}
+}
